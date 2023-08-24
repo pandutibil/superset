@@ -83,13 +83,14 @@ const defaultProps = {
 
 class ChartRenderer extends React.Component {
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       showContextMenu:
         props.source === ChartSource.Dashboard &&
         (isFeatureEnabled(FeatureFlag.DRILL_TO_DETAIL) ||
           isFeatureEnabled(FeatureFlag.DASHBOARD_CROSS_FILTERS)),
-      inContextMenu: false,
+      inContextMenu: true,
       legendState: undefined,
     };
     this.hasQueryResponseChange = false;
@@ -148,7 +149,6 @@ class ChartRenderer extends React.Component {
         this.hasQueryResponseChange ||
         !isEqual(nextProps.datasource, this.props.datasource) ||
         nextProps.annotationData !== this.props.annotationData ||
-        nextProps.ownState !== this.props.ownState ||
         nextProps.filterState !== this.props.filterState ||
         nextProps.height !== this.props.height ||
         nextProps.width !== this.props.width ||
@@ -322,6 +322,8 @@ class ChartRenderer extends React.Component {
       ?.behaviors.find(behavior => behavior === Behavior.DRILL_TO_DETAIL)
       ? { inContextMenu: this.state.inContextMenu }
       : {};
+
+    console.log(drillToDetailProps);
 
     return (
       <>

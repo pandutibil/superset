@@ -25,6 +25,7 @@ import {
   getColumnLabel,
   getNumberFormatter,
   getTimeFormatter,
+  DrillDown
 } from '@superset-ui/core';
 
 import {
@@ -33,6 +34,7 @@ import {
   EventHandlers,
 } from '../types';
 import { formatSeriesName } from './series';
+import { PieChartTransformedProps } from '../Pie/types';
 
 export type Event = {
   name: string;
@@ -91,13 +93,42 @@ export const clickEventHandler =
       value: string,
     ) => ContextMenuFilters['crossFilter'],
     setDataMask: (dataMask: DataMask) => void,
+    props: PieChartTransformedProps,
     emitCrossFilters?: boolean,
+    ownState?: any,
+    drillDown?: boolean
   ) =>
   ({ name }: { name: string }) => {
-    if (!emitCrossFilters) {
-      return;
+    let { selectedValues, labelMap } = props;
+    let values = Object.values(selectedValues);
+    if (values.includes(name)) {
+      values = values.filter(v => v !== name);
+    } else {
+      values = [...values, name];
     }
-    const dataMask = getCrossFilterDataMask(name)?.dataMask;
+    const groupbyValues = values.map(value => labelMap[value]);
+
+    // if (!emitCrossFilters) {
+    //   return;
+    // }
+
+    let dataMask = getCrossFilterDataMask(name)?.dataMask;
+
+    if (drillDown) {
+      const drilldown = DrillDown.drillDown(ownState?.drilldown, values[0])
+      dataMask = {
+        extraFormData: {
+          filters: drilldown.filters,
+        },
+        filterState: {
+          value: groupbyValues.length && drilldown.filters.length > 0 ? groupbyValues : null,
+        },
+        ownState: {
+          drilldown: drilldown,
+        }
+      }
+    }
+
     if (dataMask) {
       setDataMask(dataMask);
     }
@@ -144,7 +175,7 @@ export const contextMenuEventHandler =
   };
 
 export const allEventHandlers = (
-  transformedProps: BaseTransformedProps<any> & CrossFilterTransformedProps,
+  transformedProps: PieChartTransformedProps
 ) => {
   const {
     groupby,
@@ -155,12 +186,16 @@ export const allEventHandlers = (
     selectedValues,
     coltypeMapping,
     formData,
+    ownState
   } = transformedProps;
   const eventHandlers: EventHandlers = {
     click: clickEventHandler(
       getCrossFilterDataMask(selectedValues, groupby, labelMap),
       setDataMask,
+      transformedProps,
       emitCrossFilters,
+      ownState,
+      formData.drillDown
     ),
     contextmenu: contextMenuEventHandler(
       groupby,

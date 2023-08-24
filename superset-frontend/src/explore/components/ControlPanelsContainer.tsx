@@ -288,6 +288,7 @@ export const ControlPanelsContainer = (props: ControlPanelsContainerProps) => {
     state => state.common?.conf?.DEFAULT_TIME_FILTER,
   );
 
+  console.log(props);
   const { form_data, actions } = props;
   const { setControlValue } = actions;
   const { x_axis, adhoc_filters } = form_data;
@@ -306,6 +307,7 @@ export const ControlPanelsContainer = (props: ControlPanelsContainerProps) => {
           filter.operator === Operators.TEMPORAL_RANGE &&
           filter.subject === x_axis,
       );
+
       if (noFilter) {
         confirm({
           title: t('The X-axis is not on the filters list'),
@@ -646,10 +648,14 @@ export const ControlPanelsContainer = (props: ControlPanelsContainerProps) => {
             return null;
           }
           return (
-            <ControlRow
+            <>
+            pandu
+              <ControlRow
               key={`controlsetrow-${i}`}
               controls={renderedControls}
             />
+            end
+            </>
           );
         })}
       </Collapse.Panel>

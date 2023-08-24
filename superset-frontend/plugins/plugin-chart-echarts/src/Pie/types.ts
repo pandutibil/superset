@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { QueryFormColumn, QueryFormData } from '@superset-ui/core';
+import { QueryFormColumn, QueryFormData, JsonObject } from '@superset-ui/core';
 import {
   BaseChartProps,
   BaseTransformedProps,
@@ -45,6 +45,7 @@ export type EchartsPieFormData = QueryFormData &
     numberFormat: string;
     dateFormat: string;
     showLabelsThreshold: number;
+    drillDown: boolean;
   };
 
 export enum EchartsPieLabelType {
@@ -77,9 +78,10 @@ export const DEFAULT_FORM_DATA: EchartsPieFormData = {
   labelsOutside: true,
   showLabelsThreshold: 5,
   dateFormat: 'smart_date',
+  drillDown: false
 };
 
 export type PieChartTransformedProps =
   BaseTransformedProps<EchartsPieFormData> &
     ContextMenuTransformedProps &
-    CrossFilterTransformedProps;
+    CrossFilterTransformedProps & { ownState?: JsonObject; };

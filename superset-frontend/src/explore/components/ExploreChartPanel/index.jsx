@@ -246,6 +246,7 @@ const ExploreChartPanel = ({
         `}
         ref={chartPanelRef}
       >
+        sssstart
         {chartPanelWidth && chartPanelHeight && (
           <ChartContainer
             width={Math.floor(chartPanelWidth)}
@@ -271,6 +272,7 @@ const ExploreChartPanel = ({
             vizType={vizType}
           />
         )}
+        sssend
       </div>
     ),
     [
@@ -308,7 +310,7 @@ const ExploreChartPanel = ({
           flex-direction: column;
         `}
         ref={resizeObserverRef}
-      >
+      > 
         {vizTypeNeedsDataset && (
           <Alert
             message={t('Chart type requires a dataset')}
@@ -370,6 +372,7 @@ const ExploreChartPanel = ({
           refreshCachedQuery={refreshCachedQuery}
           rowLimit={formData?.row_limit}
         />
+        sss
         {renderChart()}
       </div>
     ),
@@ -426,7 +429,9 @@ const ExploreChartPanel = ({
   }
 
   return (
-    <Styles
+    <>
+      {vizType}
+      <Styles
       className="panel panel-default chart-container"
       showSplite={showSplite}
     >
@@ -467,6 +472,7 @@ const ExploreChartPanel = ({
         />
       )}
     </Styles>
+    </>
   );
 };
 

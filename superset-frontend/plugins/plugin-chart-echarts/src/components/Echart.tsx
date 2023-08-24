@@ -53,7 +53,10 @@ function Echart(
   }
   const chartRef = useRef<ECharts>();
   const currentSelection = useMemo(
-    () => Object.keys(selectedValues) || [],
+    () => {
+      console.log(selectedValues)
+      return Object.keys(selectedValues) || []
+    },
     [selectedValues],
   );
   const previousSelection = useRef<string[]>([]);
@@ -118,7 +121,10 @@ function Echart(
     handleSizeChange({ width, height });
   }, [width, height, handleSizeChange]);
 
-  return <Styles ref={divRef} height={height} width={width} />;
+  return <>
+  echartOptions
+  <Styles ref={divRef} height={height} width={width} />
+  </>;
 }
 
 export default forwardRef(Echart);

@@ -204,6 +204,14 @@ export interface SqlaFormData extends BaseFormData {
 
 export type QueryFormData = SqlaFormData;
 
+export type DrillDownType = {
+  hierarchy: string[];
+  currentIdx: number;
+  filters: QueryObjectFilterClause[];
+}
+
+export type OwnState = JsonObject & { drilldown?: DrillDownType; }
+
 //---------------------------------------------------
 // Type guards
 //---------------------------------------------------

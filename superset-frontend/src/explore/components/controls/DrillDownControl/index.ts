@@ -16,25 +16,4 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React from 'react';
-import { PieChartTransformedProps } from './types';
-import Echart from '../components/Echart';
-import { allEventHandlers } from '../utils/eventHandlers';
-import { DataMask, DrillDown } from "@superset-ui/core";
-
-export default function EchartsPie(props: PieChartTransformedProps) {
-  const { height, width, echartOptions, selectedValues, refs } = props;
-
-  const eventHandlers = allEventHandlers(props);
-
-  return (
-    <Echart
-      refs={refs}
-      height={height}
-      width={width}
-      echartOptions={echartOptions}
-      eventHandlers={eventHandlers}
-      selectedValues={selectedValues}
-    />
-  );
-}
+export { default } from './DrillDownControl';

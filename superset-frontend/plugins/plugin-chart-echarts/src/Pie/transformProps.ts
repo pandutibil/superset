@@ -26,6 +26,7 @@ import {
   t,
   ValueFormatter,
   getValueFormatter,
+  DrillDown
 } from '@superset-ui/core';
 import { CallbackDataParams } from 'echarts/types/src/util/types';
 import { EChartsCoreOption, PieSeriesOption } from 'echarts';
@@ -147,6 +148,7 @@ export default function transformProps(
     inContextMenu,
     emitCrossFilters,
     datasource,
+    ownState
   } = chartProps;
   const { columnFormats = {}, currencyFormats = {} } = datasource;
   const { data = [] } = queriesData[0];
@@ -172,6 +174,7 @@ export default function transformProps(
     showLabelsThreshold,
     sliceId,
     showTotal,
+    drillDown
   }: EchartsPieFormData = {
     ...DEFAULT_LEGEND_FORM_DATA,
     ...DEFAULT_PIE_FORM_DATA,
@@ -179,8 +182,10 @@ export default function transformProps(
   };
   const refs: Refs = {};
   const metricLabel = getMetricLabel(metric);
-  const groupbyLabels = groupby.map(getColumnLabel);
+  let groupbyLabels = groupby.map(getColumnLabel);
   const minShowLabelAngle = (showLabelsThreshold || 0) * 3.6;
+
+  groupbyLabels = drillDown && ownState?.drilldown ? [DrillDown.getColumn(ownState.drilldown, groupbyLabels)] : groupbyLabels;
 
   const keys = data.map(datum =>
     extractGroupbyLabel({

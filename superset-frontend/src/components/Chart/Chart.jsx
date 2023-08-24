@@ -24,6 +24,7 @@ import {
   logging,
   styled,
   t,
+  DrillDown
 } from '@superset-ui/core';
 import { isFeatureEnabled } from 'src/featureFlags';
 import { PLACEHOLDER_DATASOURCE } from 'src/dashboard/constants';
@@ -143,6 +144,11 @@ class Chart extends React.PureComponent {
   }
 
   componentDidMount() {
+    if (this.props.formData?.drillDown) {
+      const drilldown = DrillDown.fromHierarchy(this.props.formData.groupby)
+      this.props.actions.updateDataMask(this.props.chartId, {ownState: {drilldown: drilldown}});
+    }
+    
     if (this.props.triggerQuery) {
       this.runQuery();
     }
